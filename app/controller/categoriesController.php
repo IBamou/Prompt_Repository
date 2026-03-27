@@ -1,5 +1,5 @@
 <?php
-include 'app/model/categoryModel.php';
+include 'app/model/CategoryModel.php';
 
 if(!isset($_SESSION['user'])) {
     header('Location: auth');
@@ -7,8 +7,29 @@ if(!isset($_SESSION['user'])) {
 }
 
 $user = $_SESSION['user'];
-$isAdmin = $user['role'] == 'admin';
+$isAdmin = ($user['role'] == 'admin' || $user['role'] == 'superAdmin');
+$isSuperAdmin = ($user['role'] == 'superAdmin');
+
 $title = 'Categories';
+
+$errors = [];
+
+function cleanInput($data) {
+    return htmlspecialchars(trim($data));
+}
+
+function validateCategoryName($name, $excludeId = null) {
+    if (empty($name)) {
+        return "Category name cannot be empty.";
+    }
+    if (strlen($name) > 100) {
+        return "Category name cannot exceed 100 characters.";
+    }
+    if (categoryNameExists($name, $excludeId)) {
+        return "A category with this name already exists.";
+    }
+    return null;
+}
 
 // Handle actions
 if (isset($_POST['action'])) {
@@ -39,15 +60,34 @@ if (isset($_POST['operation'])) {
     ];
     switch ($operation) {
         case 'addCategory':
-            addCategory($info);
+            $name = cleanInput($_POST['name']);
+            $info['name'] = $name;
+            $error = validateCategoryName($name);
+            if ($error) {
+                $_SESSION['error'] = $error;
+            } else {
+                addCategory($info);
+                $_SESSION['success'] = "Category added successfully.";
+            }
             break;
         case 'editCategory':
-            if (checkCategoryUpdate($info)) {
+            $name = cleanInput($_POST['name']);
+            $info['name'] = $name;
+            $error = validateCategoryName($name, $info['id']);
+            if ($error) {
+                $_SESSION['error'] = $error;
+            } elseif (checkCategoryUpdate($info)) {
                 updateCategory($info);
+                $_SESSION['success'] = "Category updated successfully.";
             }
             break;
         case 'deleteCategory':
-            deleteCategory($info);
+            if ($info['id'] == 1) {
+                $_SESSION['error'] = "Cannot delete the default 'Uncategorized' category.";
+            } else {
+                deleteCategory($info);
+                $_SESSION['success'] = "Category deleted successfully.";
+            }
             break;
     }
     if (isset($_POST['from'])) {

@@ -76,6 +76,24 @@ function searchCategories($search) {
 }
 
 
+function categoryNameExists($name, $excludeId = null) {
+    try {
+        if ($excludeId) {
+            $query = 'SELECT id FROM categories WHERE name = :name AND id != :id';
+            $stmt = $GLOBALS['db']->prepare($query);
+            $stmt->execute([':name' => $name, ':id' => $excludeId]);
+        } else {
+            $query = 'SELECT id FROM categories WHERE name = :name';
+            $stmt = $GLOBALS['db']->prepare($query);
+            $stmt->execute([':name' => $name]);
+        }
+        return $stmt->fetch() !== false;
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        return false;
+    }
+}
+
 function categoryName($categoryId) {
     try {
         $query = "SELECT name FROM categories WHERE id = :id";

@@ -9,6 +9,37 @@ if(!isset($_SESSION['user'])) {
     exit;
 }
 
+$errors = [];
+$success = [];
+
+function cleanInput($data) {
+    return htmlspecialchars(trim($data));
+}
+
+function validatePromptInput($title, $content, $category_id, $excludeId = null) {
+    $errors = [];
+    
+    if (empty($title)) {
+        $errors[] = "Title cannot be empty.";
+    } elseif (strlen($title) > 200) {
+        $errors[] = "Title cannot exceed 200 characters.";
+    }
+    
+    if (empty($content)) {
+        $errors[] = "Content cannot be empty.";
+    }
+    
+    if (empty($category_id)) {
+        $errors[] = "Please select a category.";
+    }
+    
+    if (empty($errors) && promptTitleExists($title, $excludeId)) {
+        $errors[] = "A prompt with this title already exists.";
+    }
+    
+    return $errors;
+}
+
 if (isset($_GET['search']) ) {
     $search = $_GET['search'];
     $category = $_GET['category'];
@@ -28,7 +59,9 @@ $activeUsers = totalUsers();
 $categories = getCategories();
 $users = getUsers();
 $user = $_SESSION['user'];
-$isAdmin = $user['role'] == 'admin';
+$isAdmin = ($user['role'] == 'admin' || $user['role'] == 'superAdmin');
+$isSuperAdmin = ($user['role'] == 'superAdmin');
+
 $userId = $user['id'];
 include 'app/view/promptsView.php';
 exit;

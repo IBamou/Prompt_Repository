@@ -39,7 +39,7 @@ $showSearch = true;   // ← change to false on pages where you don't want the s
   </nav>
 
   <!-- ====================== PAGE CONTENT ====================== -->
-  <main style="padding: 2rem; max-width: 1200px; margin: 0 auto;">
+  <main class="page-content">
     <!-- Your existing page content goes here -->
   </main>
 

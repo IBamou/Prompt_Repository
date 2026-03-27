@@ -1,5 +1,38 @@
 /* ====================== DASHBOARD — MODERN UI ====================== */
 
+/* ====================== TABLE STYLES ====================== */
+td .btn {
+  background: transparent;
+  font-size: 15px;
+  color: #717171;
+  padding: 0;
+  border: none;
+}
+
+td .btn:hover {
+  background: transparent;
+  color: #4f46e5;
+}
+
+td .btn-view {
+  background: transparent;
+  font-size: 15px;
+  color: #717171;
+  padding: 0;
+  border: none;
+}
+
+.table-actions-cell {
+  display: flex;
+  justify-content: center;
+}
+
+.table-empty-row td {
+  text-align: center;
+  color: gray;
+  padding: 20px;
+}
+
 .dashboard-page {
   --primary: #4f46e5;
   --primary-hover: #4338ca;

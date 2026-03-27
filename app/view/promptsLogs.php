@@ -22,7 +22,7 @@ $showSearch = false;
       <a href="categories" class="btn btn-secondary">Categories</a>
             <a href="prompts" class="btn btn-secondary">Prompts</a>
 
-            <?php if($isAdmin): ?>
+            <?php if($isSuperAdmin): ?>
         <a href="users" class="btn btn-secondary">Users</a>
       <?php endif; ?>
       <form action="auth" method="post">

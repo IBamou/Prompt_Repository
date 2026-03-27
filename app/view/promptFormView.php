@@ -30,7 +30,7 @@ if (!isset($isEditing)) {
       <a href="categories" class="btn btn-secondary">Categories</a>
             <a href="prompts" class="btn btn-secondary">Prompts</a>
 
-        <?php if($isAdmin): ?>
+        <?php if($isSuperAdmin): ?>
         <a href="users" class="btn btn-secondary">Users</a>
       <?php endif; ?>
       <form action="auth" method="post">
@@ -43,6 +43,16 @@ if (!isset($isEditing)) {
     <main class="prompt-form-page">
         <div class="prompt-form-card">
             <h1><?= $isEditing ? 'Edit Prompt' : 'Add Prompt' ?></h1>
+
+            <?php if (isset($_SESSION['error'])): ?>
+                <div class="alert alert-error"><?= htmlspecialchars($_SESSION['error']) ?></div>
+                <?php unset($_SESSION['error']); ?>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['success'])): ?>
+                <div class="alert alert-success"><?= htmlspecialchars($_SESSION['success']) ?></div>
+                <?php unset($_SESSION['success']); ?>
+            <?php endif; ?>
 
             <form action="promptCategory" method="post">
                 <?php if (isset($_POST['from']) ) : ?>

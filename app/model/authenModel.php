@@ -1,49 +1,86 @@
 <?php
 include 'app/config/db.php'; // $db is PDO
 
+// function setAdmin($name, $email, $password) {
+//     global $db; // PDO connection
+
+//     if (!$db);
+
+//     // hash password
+//     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+//     try {
+//         // start transaction
+//         $db->beginTransaction();
+
+//         // check if user exists
+//         $stmt = $db->prepare("SELECT id FROM users WHERE email = ?");
+//         $stmt->execute([$email]);
+//         $userExists = $stmt->rowCount() > 0;
+
+//         if ($userExists) {
+//             // user exists → make all users 'user'
+//             $db->exec("UPDATE users SET role='user'");
+
+//             // set this user to 'admin'
+//             $stmt = $db->prepare("UPDATE users SET role='admin' WHERE email = ?");
+//             $stmt->execute([$email]);
+
+//             $db->commit();
+
+//         } else {
+//             // new user → make all existing users 'user' just in case
+//             $db->exec("UPDATE users SET role='user'");
+
+//             // insert new admin
+//             $stmt = $db->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, 'admin')");
+//             $stmt->execute([$name, $email, $hashedPassword]);
+
+//             $db->commit();
+//         }
+//     } catch (Exception $e) {
+//         $db->rollBack();
+//         return "Error: " . $e->getMessage();
+//     }
+// }
 function setAdmin($name, $email, $password) {
     global $db; // PDO connection
 
-    if (!$db);
+    if (!$db) {
+        return "Error: Database connection not available.";
+    }
 
-    // hash password
+    // Hash password
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     try {
-        // start transaction
         $db->beginTransaction();
 
-        // check if user exists
+        // Check if user exists
         $stmt = $db->prepare("SELECT id FROM users WHERE email = ?");
         $stmt->execute([$email]);
         $userExists = $stmt->rowCount() > 0;
 
+        // Demote ALL existing mainadmins and admins (only 1 mainadmin allowed)
+        // $db->exec("UPDATE users SET role='user' WHERE role IN ('superAdmin', 'admin')");
+
         if ($userExists) {
-            // user exists → make all users 'user'
-            $db->exec("UPDATE users SET role='user'");
-
-            // set this user to 'admin'
-            $stmt = $db->prepare("UPDATE users SET role='admin' WHERE email = ?");
+            // User exists → promote to mainadmin
+            $stmt = $db->prepare("UPDATE users SET role='superAdmin' WHERE email = ?");
             $stmt->execute([$email]);
-
-            $db->commit();
-
         } else {
-            // new user → make all existing users 'user' just in case
-            $db->exec("UPDATE users SET role='user'");
-
-            // insert new admin
-            $stmt = $db->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, 'admin')");
+            // New user → insert as mainadmin
+            $stmt = $db->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, 'superAdmin')");
             $stmt->execute([$name, $email, $hashedPassword]);
-
-            $db->commit();
         }
+
+        $db->commit();
+        return true;
     } catch (Exception $e) {
         $db->rollBack();
         return "Error: " . $e->getMessage();
     }
 }
-
 function verifyLogInData($email, $password) {
     try {
         // fetch the user by email

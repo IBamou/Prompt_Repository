@@ -18,7 +18,7 @@
       <a href="dashboard" class="btn btn-secondary">Dashboard</a>
       <a href="categories" class="btn btn-secondary">Categories</a>
       <a href="prompts" class="btn btn-secondary">Prompts</a>
-      <?php if($isAdmin): ?>
+      <?php if($isSuperAdmin): ?>
         <a href="users" class="btn btn-secondary">Users</a>
       <?php endif; ?>
       <form action="auth" method="post">
@@ -77,7 +77,7 @@
         </section>
               <!-- Quick Actions -->
       <section class="quick-actions">
-          <?php if($isAdmin): ?>
+          <?php if($isSuperAdmin || $isAdmin): ?>
                 <form action="categories" method="post">
                     <input type="hidden" name="from" value="dashboard">
                     <button type="submit" name="action" value="addCategory" class="btn btn-secondary">
@@ -127,7 +127,7 @@
                 <input type="hidden" name="name" value="<?= htmlspecialchars($prompt['category_name']) ?>">
                 <input type="hidden" name="description" value="<?= htmlspecialchars($prompt['category_description'] ?? '') ?>">
                 <span class="recent-item-category" >
-                <button type="submit" name="showCategory" value="on" class="btn btn-view" style="background:transparent; font-size: 15px; color:#717171" title="Go To Category"><?= htmlspecialchars($prompt['category_name']) ?></button>
+                <button type="submit" name="showCategory" value="on" class="btn btn-view" title="Go To Category"><?= htmlspecialchars($prompt['category_name']) ?></button>
                 </span>
               </form>
             </td>
@@ -138,10 +138,10 @@
               </span>
             </td>
 
-            <td style="display: flex; justify-content: center;">
+            <td class="table-actions-cell">
               <div class="recent-item-actions">
 
-                <?php if ($userId == $prompt['user_id'] || $isAdmin): ?>
+                <?php if ($userId == $prompt['user_id'] || $isSuperAdmin): ?>
                   <!-- EDIT -->
                   <form action="promptCategory" method="post">
                     <input type="hidden" name="id" value="<?= $prompt['id'] ?>">
@@ -179,8 +179,8 @@
           </tr>
         <?php endforeach; ?>
       <?php else: ?>
-        <tr>
-          <td colspan="4" style="text-align:center; color: gray;">
+        <tr class="table-empty-row">
+          <td colspan="4">
             No recent prompts yet.
           </td>
         </tr>

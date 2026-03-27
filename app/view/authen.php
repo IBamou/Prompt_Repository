@@ -6,14 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="app/view/css/style.css">
-    <title>Prompts Manger</title>
+    <title>Prompts Manager</title>
 </head>
 
 <body>
 
     <div class="container" id="container">
+        <?php if (isset($_SESSION['error'])): ?>
+            <div class="alert-banner alert-error">
+                <i class="fas fa-exclamation-circle"></i>
+                <?= htmlspecialchars($_SESSION['error']) ?>
+                <button onclick="this.parentElement.remove()">&times;</button>
+            </div>
+            <?php unset($_SESSION['error']); ?>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['success'])): ?>
+            <div class="alert-banner alert-success">
+                <i class="fas fa-check-circle"></i>
+                <?= htmlspecialchars($_SESSION['success']) ?>
+                <button onclick="this.parentElement.remove()">&times;</button>
+            </div>
+            <?php unset($_SESSION['success']); ?>
+        <?php endif; ?>
+
         <div class="form-container sign-up">
             <form action="auth" method="post">
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken ?? '') ?>">
                 <h1>Create Account</h1>
                 <div class="social-icons">
                     <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
@@ -21,15 +40,16 @@
                     <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
                     <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
                 </div>
-                <span>or use your email for registeration</span>
-                <input type="text" name="name" placeholder="Name">
-                <input type="email" name="email" placeholder="Email">
-                <input type="password" name="password" placeholder="Password">
+                <span>or use your email for registration</span>
+                <input type="text" name="name" placeholder="Name" value="<?= htmlspecialchars($formData['name'] ?? '') ?>" required>
+                <input type="email" name="email" placeholder="Email" value="<?= htmlspecialchars($formData['email'] ?? '') ?>" required>
+                <input type="password" name="password" placeholder="Password" required minlength="6">
                 <button type="submit" name="action" value="signUp">Sign Up</button>
             </form>
         </div>
         <div class="form-container sign-in">
             <form action="auth" method="post">
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken ?? '') ?>">
                 <h1>Sign In</h1>
                 <div class="social-icons">
                     <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
@@ -38,9 +58,9 @@
                     <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
                 </div>
                 <span>or use your email password</span>
-                <input type="email" name="email" placeholder="Email">
-                <input type="password" name="password" placeholder="Password">
-                <a href="#">Forget Your Password?</a>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <a href="#">Forgot Your Password?</a>
                 <button type="submit" name="action" value="signIn">Sign In</button>
             </form>
         </div>

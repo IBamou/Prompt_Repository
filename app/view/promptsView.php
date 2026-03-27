@@ -4,65 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>All Prompts</title>
-  
-  <!-- Navbar CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <link rel="stylesheet" href="app/view/css/navbar.css">
-  <!-- Page CSS -->
   <link rel="stylesheet" href="app/view/css/prompts.css">
-  <style>
-
-/* ====================== QUICK ACTIONS (Add Prompt) ====================== */
-
-.quick-actions {
-  display: flex;
-  justify-content: flex-start;   /* button on the right */
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-/* Form reset (important) */
-.quick-actions form {
-  margin: 0;
-}
-
-/* Button */
-.quick-actions .btn-primary {
-  background: #4f46e5;
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 10px;
-
-  font-size: 0.95rem;
-  font-weight: 600;
-
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-/* Hover effect */
-.quick-actions .btn-primary:hover {
-  background: #4338ca;
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.35);
-}
-
-/* Click effect */
-.quick-actions .btn-primary:active {
-  transform: translateY(0);
-  box-shadow: 0 4px 10px -3px rgba(79, 70, 229, 0.3);
-}
-
-/* Optional: focus (keyboard accessibility) */
-.quick-actions .btn-primary:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.25);
-}
-  </style>
 </head>
 <body>
 
@@ -76,7 +20,7 @@
       <a href="categories" class="btn btn-secondary">Categories</a>
             <a href="prompts" class="btn btn-secondary">Prompts</a>
 
-      <?php if($isAdmin): ?>
+      <?php if($isSuperAdmin): ?>
         <a href="users" class="btn btn-secondary">Users</a>
       <?php endif; ?>
       <form action="auth" method="post">
@@ -87,6 +31,24 @@
 
   <!-- ====================== PAGE CONTENT ====================== -->
   <main class="all-prompts-page">
+
+    <?php if (isset($_SESSION['error'])): ?>
+      <div class="alert-banner alert-error">
+        <i class="fas fa-exclamation-circle"></i>
+        <?= htmlspecialchars($_SESSION['error']) ?>
+        <button onclick="this.parentElement.remove()">&times;</button>
+      </div>
+      <?php unset($_SESSION['error']); ?>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['success'])): ?>
+      <div class="alert-banner alert-success">
+        <i class="fas fa-check-circle"></i>
+        <?= htmlspecialchars($_SESSION['success']) ?>
+        <button onclick="this.parentElement.remove()">&times;</button>
+      </div>
+      <?php unset($_SESSION['success']); ?>
+    <?php endif; ?>
 
     <!-- Hero Section -->
     <section class="prompts-hero">
@@ -237,7 +199,7 @@
 
             <!-- ✅ Actions — ALWAYS VISIBLE + LOGS BUTTON -->
             <div class="prompt-actions">
-              <form action="promptsLogs" method="get" style="display: flex; flex: 1;">
+              <form action="promptsLogs" method="get">
                 <input type="hidden" name="prompt_id" value="<?= $prompt['id'] ?>">
                 <button class="btn-action btn-logs" type="submit">
                 Logs
@@ -249,9 +211,9 @@
                  Details
               </button>
 
-                <?php if ($userId == $prompt['user_id'] || $isAdmin): ?>
+                <?php if ($userId == $prompt['user_id'] || $isSuperAdmin): ?>
                   <!-- EDIT -->
-                  <form action="promptCategory" method="post" style="display: flex; flex: 1;">
+                  <form action="promptCategory" method="post">
                     <input type="hidden" name="id" value="<?= $prompt['id'] ?>">
                     <input type="hidden" name="title" value="<?= htmlspecialchars($prompt['title']) ?>">
                     <input type="hidden" name="content" value="<?= htmlspecialchars($prompt['content']) ?>">
@@ -261,7 +223,7 @@
                   </form>
 
                   <!-- DELETE -->
-                  <form action="promptCategory" method="post" onsubmit="return confirm('Delete this prompt?');" style="display: flex; flex: 1;">
+                  <form action="promptCategory" method="post" onsubmit="return confirm('Delete this prompt?');">
                     <input type="hidden" name="from" value="prompts">
                     <input type="hidden" name="id" value="<?= $prompt['id'] ?>">
                     <button type="submit" name="operation" value="deletePrompt" class="btn-action btn-delete">Delete</button>

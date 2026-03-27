@@ -12,6 +12,77 @@ body {
   line-height: 1.6;
 }
 
+/* ====================== FILTER BUTTONS ====================== */
+.btn-apply-filters {
+  padding: 10px 24px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  align-self: flex-end;
+}
+
+.btn-apply-filters:hover {
+  background: #5568d3;
+}
+
+.btn-clear-filters {
+  padding: 10px 20px;
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  align-self: flex-end;
+}
+
+.btn-clear-filters:hover {
+  background: #e2e8f0;
+}
+
+/* ====================== SEARCH BAR FORM ====================== */
+.users-search-bar form {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* ====================== HIDDEN FORMS ====================== */
+.users-grid form.hidden-form {
+  display: none;
+}
+
+/* ====================== ALERTS ====================== */
+.alert {
+  padding: 14px 20px;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.alert-error {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.alert-success {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
 .users-page {
   max-width: 1400px;
   margin: 0 auto;

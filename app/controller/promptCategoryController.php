@@ -7,8 +7,36 @@ if(!isset($_SESSION['user'])) {
     exit;
 }
 
+$errors = [];
+$success = [];
 
+function cleanInput($data) {
+    return htmlspecialchars(trim($data));
+}
 
+function validatePromptInput($title, $content, $category_id, $excludeId = null) {
+    $errors = [];
+    
+    if (empty($title)) {
+        $errors[] = "Title cannot be empty.";
+    } elseif (strlen($title) > 200) {
+        $errors[] = "Title cannot exceed 200 characters.";
+    }
+    
+    if (empty($content)) {
+        $errors[] = "Content cannot be empty.";
+    }
+    
+    if (empty($category_id)) {
+        $errors[] = "Please select a category.";
+    }
+    
+    if (empty($errors) && promptTitleExists($title, $excludeId)) {
+        $errors[] = "A prompt with this title already exists.";
+    }
+    
+    return $errors;
+}
 
 if (isset($_POST["showCategory"])) {
     $_SESSION["id"] = $_POST["id"];
@@ -17,7 +45,9 @@ if (isset($_POST["showCategory"])) {
 }
 
 $user = $_SESSION['user'];
-$isAdmin = ($user['role'] == 'admin');
+$isAdmin = ($user['role'] == 'admin' || $user['role'] == 'superAdmin');
+$isSuperAdmin = ($user['role'] == 'superAdmin');
+
 $userId = $user['id'];
 
 $categoryId = $_SESSION["id"] ?? '';
@@ -59,53 +89,68 @@ if (isset($_POST['action'])) {
     header('Location: promptCategory');
     exit;
 }
+
 // Handle operations
 if (isset($_POST['operation'])) {
     $operation = $_POST['operation'];
     $info = [
         'id'=> $_POST['id'] ?? '',
-        'title'=> $_POST['title'] ?? '',
-        'content'=> $_POST['content'] ?? '',
+        'title'=> cleanInput($_POST['title'] ?? ''),
+        'content'=> cleanInput($_POST['content'] ?? ''),
         'category_id'=> $_POST['category_id'] ?? '',
         'user_id' => $_SESSION['user']['id'] ?? ''
     ];
     switch ($operation) {
         case 'addPrompt':
-            addPrompt($info);
-            $prompt_id = $GLOBALS['db']->lastInsertId();
-            addPromptLog($_SESSION['user']['id'], $_SESSION['user']['name'], $prompt_id, 'CREATE', null, null, null, 'Prompt added');
+            $validationErrors = validatePromptInput($info['title'], $info['content'], $info['category_id']);
+            if (!empty($validationErrors)) {
+                $_SESSION['error'] = implode(' ', $validationErrors);
+            } else {
+                addPrompt($info);
+                $prompt_id = $GLOBALS['db']->lastInsertId();
+                addPromptLog($_SESSION['user']['id'], $_SESSION['user']['name'], $prompt_id, 'CREATE', null, null, null, 'Prompt added');
+                $_SESSION['success'] = "Prompt added successfully.";
+            }
             break;
         case 'editPrompt':
-            $changes = getPromptChanges($info);
-            if (!empty($changes)) {
-                foreach ($changes as $change) {
-                    addPromptLog(
-                        $_SESSION['user']['id'],
-                        $_SESSION['user']['name'],
-                        $info['id'],
-                        'UPDATE',
-                        $change['field'],
-                        $change['old'],
-                        $change['new'],
-                        "Prompt updated, updated field '{$change['field']}'"
-                    );        
+            $validationErrors = validatePromptInput($info['title'], $info['content'], $info['category_id'], $info['id']);
+            if (!empty($validationErrors)) {
+                $_SESSION['error'] = implode(' ', $validationErrors);
+            } else {
+                $changes = getPromptChanges($info);
+                if (!empty($changes)) {
+                    foreach ($changes as $change) {
+                        addPromptLog(
+                            $_SESSION['user']['id'],
+                            $_SESSION['user']['name'],
+                            $info['id'],
+                            'UPDATE',
+                            $change['field'],
+                            $change['old'],
+                            $change['new'],
+                            "Prompt updated, updated field '{$change['field']}'"
+                        );        
+                    }
+                    updatePrompt($info);
+                    $_SESSION['success'] = "Prompt updated successfully.";
                 }
-                updatePrompt($info);
-                }
+            }
             break;
         case 'deletePrompt':
             deletePrompt($info);
             addPromptLog($_SESSION['user']['id'], $_SESSION['user']['name'], $info['id'], 'DELETE', null, null, null, 'Prompt deleted');
+            $_SESSION['success'] = "Prompt deleted successfully.";
             break;
         case 'uncategorizePrompt':
             uncategorizePrompt($info);
             addPromptLog($_SESSION['user']['id'], $_SESSION['user']['name'], $info['id'], 'UPDATE', 'category', categoryName($categoryId), categoryName(1), 'Prompt uncategorized');
+            $_SESSION['success'] = "Prompt uncategorized successfully.";
             break;
         case 'addPromptToCategory':
             addPromptToCategory($info);
             addPromptLog($_SESSION['user']['id'], $_SESSION['user']['name'], $info['id'], 'UPDATE', 'category', categoryName($categoryId), categoryName($info['category_id']), "Prompt added to " . categoryName($info['category_id']) . " category");
+            $_SESSION['success'] = "Prompt moved to category successfully.";
             break;
-
     }
     if (isset($_POST['from'])) {
         header('Location: ' . $_POST['from']);
@@ -115,9 +160,6 @@ if (isset($_POST['operation'])) {
     header('Location: promptCategory');
     exit;
 }
-
-
-
 
 include 'app/view/promptCategoryView.php';
 exit;

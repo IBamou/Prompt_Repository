@@ -188,6 +188,24 @@ function getAllPrompts(){
 
 
 
+function promptTitleExists($title, $excludeId = null) {
+    try {
+        if ($excludeId) {
+            $query = 'SELECT id FROM prompts WHERE title = :title AND id != :id LIMIT 1';
+            $stmt = $GLOBALS['db']->prepare($query);
+            $stmt->execute([':title' => $title, ':id' => $excludeId]);
+        } else {
+            $query = 'SELECT id FROM prompts WHERE title = :title LIMIT 1';
+            $stmt = $GLOBALS['db']->prepare($query);
+            $stmt->execute([':title' => $title]);
+        }
+        return $stmt->fetch() !== false;
+    } catch (Exception $e) {
+        error_log('promptTitleExists error: ' . $e->getMessage());
+        return false;
+    }
+}
+
 function getSearchedPrompts($search, $category, $user, $date_from, $date_to, $sort) {
     try {
         $select = 'SELECT

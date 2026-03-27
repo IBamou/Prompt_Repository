@@ -6,13 +6,12 @@ if(!isset($_SESSION['user'])) {
     exit;
 }
 
-
 $recentPrompts = getRecentPrompts();  
-
 
 $user = $_SESSION["user"];
 $userId = $user["id"];
-$isAdmin = ($user['role'] == 'admin');
+$isAdmin = ($user['role'] == 'admin' || $user['role'] == 'superAdmin');
+$isSuperAdmin = ($user['role'] == 'superAdmin');
 $totalPrompts = totalPrompts();
 $promptsThisMonth = promptsThisMonth();
 $totalCategories = totalCategories();

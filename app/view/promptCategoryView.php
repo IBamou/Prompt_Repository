@@ -36,7 +36,7 @@ $showSearch = true;   // ← change to false on pages where you don't want the s
       <a href="categories" class="btn btn-secondary">Categories</a>
             <a href="prompts" class="btn btn-secondary">Prompts</a>
 
-            <?php if($isAdmin): ?>
+            <?php if($isSuperAdmin): ?>
         <a href="users" class="btn btn-secondary">Users</a>
       <?php endif; ?>
       <form action="auth" method="post">
@@ -76,7 +76,7 @@ $showSearch = true;   // ← change to false on pages where you don't want the s
                         <h3><?= htmlspecialchars($prompt['title']) ?></h3>
 
                         <div class="card-actions">
-                            <?php if ($userId == $prompt['user_id'] || $isAdmin): ?>
+                            <?php if ($userId == $prompt['user_id'] || $isSuperAdmin): ?>
                             <!-- EDIT PROMPT -->
                             <form action="promptCategory" method="post">
                                 <input type="hidden" name="id" value="<?= $prompt['id'] ?>">

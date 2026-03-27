@@ -1,5 +1,5 @@
 <?php
-$showSearch = false; // Hide navbar search on admin page
+$showSearch = false;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,44 +7,10 @@ $showSearch = false; // Hide navbar search on admin page
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Users Management — Admin</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <link rel="stylesheet" href="app/view/css/navbar.css">
   <link rel="stylesheet" href="app/view/css/users.css">
 </head>
-<style>
-  .btn-apply-filters {
-  padding: 10px 24px;
-  background: #667eea;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  align-self: flex-end;
-}
-
-.btn-apply-filters:hover {
-  background: #5568d3;
-}
-
-.btn-clear-filters {
-  padding: 10px 20px;
-  background: #f1f5f9;
-  color: #475569;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  font-weight: 500;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  align-self: flex-end;
-}
-
-.btn-clear-filters:hover {
-  background: #e2e8f0;
-}
-</style>
 <body>
 
   <!-- Navbar -->
@@ -57,7 +23,7 @@ $showSearch = false; // Hide navbar search on admin page
       <a href="categories" class="btn btn-secondary">Categories</a>
             <a href="prompts" class="btn btn-secondary">Prompts</a>
 
-      <?php if($isAdmin): ?>
+      <?php if($isSuperAdmin): ?>
         <a href="users" class="btn btn-secondary">Users</a>
       <?php endif; ?>
       <form action="auth" method="post">
@@ -68,6 +34,18 @@ $showSearch = false; // Hide navbar search on admin page
 
   <!-- Page -->
   <main class="users-page">
+
+    <?php if (!empty($error)): ?>
+      <?php foreach ($error as $msg): ?>
+        <div class="alert alert-error"><?= htmlspecialchars($msg) ?></div>
+      <?php endforeach; ?>
+    <?php endif; ?>
+
+    <?php if (!empty($success)): ?>
+      <?php foreach ($success as $msg): ?>
+        <div class="alert alert-success"><?= htmlspecialchars($msg) ?></div>
+      <?php endforeach; ?>
+    <?php endif; ?>
 
     <!-- Hero -->
     <section class="users-hero">
@@ -92,7 +70,7 @@ $showSearch = false; // Hide navbar search on admin page
 
     <!-- Search & Filter -->
     <section class="users-search-bar">
-      <form action="users" method="get" class="search-box" style="display: flex; gap: 7px;">
+      <form action="users" method="get" class="search-box">
         
       <div class="search-box">
         <input type="text" id="searchUsers" name="search" value="<?= htmlspecialchars($_GET['search'] ?? '') ?>" placeholder="Search by name or email...">
@@ -133,6 +111,8 @@ $showSearch = false; // Hide navbar search on admin page
             <div class="user-badges">
               <?php if ($user['role'] === 'admin'): ?>
                 <span class="badge badge-admin">Admin</span>
+              <?php elseif ($user['role'] === 'superAdmin'): ?>
+                <span class="badge badge-admin">Super Admin</span>
               <?php else: ?>
                 <span class="badge badge-user">User</span>
               <?php endif; ?>
@@ -193,22 +173,22 @@ $showSearch = false; // Hide navbar search on admin page
           </article>
 
           <!-- Hidden forms for actions -->
-          <form id="admin-form-<?= $user['id'] ?>" action="users" method="post" style="display:none;">
+          <form id="admin-form-<?= $user['id'] ?>" action="users" method="post" class="hidden-form">
             <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
             <input type="hidden" name="operation" value="makeAdmin">
           </form>
 
-          <form id="revoke-form-<?= $user['id'] ?>" action="users" method="post" style="display:none;">
+          <form id="revoke-form-<?= $user['id'] ?>" action="users" method="post" class="hidden-form">
             <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
             <input type="hidden" name="operation" value="revokeAdmin">
           </form>
 
-          <form id="block-form-<?= $user['id'] ?>" action="users" method="post" style="display:none;">
+          <form id="block-form-<?= $user['id'] ?>" action="users" method="post" class="hidden-form">
             <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
             <input type="hidden" name="operation" value="blockUser">
           </form>
 
-          <form id="unblock-form-<?= $user['id'] ?>" action="users" method="post" style="display:none;">
+          <form id="unblock-form-<?= $user['id'] ?>" action="users" method="post" class="hidden-form">
             <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
             <input type="hidden" name="operation" value="unblockUser">
           </form>
