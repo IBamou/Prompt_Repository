@@ -10,7 +10,7 @@ if (!isset($isEditing)) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?= htmlspecialchars($title ?? 'Prompts Manager') ?></title>
   <link rel="stylesheet" href="app/view/css/navbar.css">
-  <link rel="stylesheet" href="app/view/css/promptForm.css">
+  <link rel="stylesheet" href="app/view/css/promptFormstyles.css">
 
   <!-- load your page‑specific CSS after, so it can override if needed -->
 </head>

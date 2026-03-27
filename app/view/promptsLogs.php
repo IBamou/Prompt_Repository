@@ -8,7 +8,7 @@ $showSearch = false;
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prompt Logs — Activity Timeline</title>
   <link rel="stylesheet" href="app/view/css/navbar.css">
-  <link rel="stylesheet" href="app/view/css/promptsLogs.css">
+  <link rel="stylesheet" href="app/view/css/promptsLogsstyles.css">
 </head>
 <body>
 

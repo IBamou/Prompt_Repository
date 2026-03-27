@@ -8,7 +8,7 @@ $showSearch = true;   // ← change to false on pages where you don't want the s
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($categoryName) ?></title>
-    <link rel="stylesheet" href="app/view/css/promptCategorystyle.css">
+    <link rel="stylesheet" href="app/view/css/promptCategorystyles.css">
     <link rel="stylesheet" href="app/view/css/navbar.css">
 </head>
 <body>
