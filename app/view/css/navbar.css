@@ -1,0 +1,134 @@
+/* ====================== APP NAVBAR — LIGHT MODE (Isolated) ====================== */
+.app-navbar {
+  /* Design tokens – match your app */
+  --primary: #4f46e5;
+  --primary-focus: rgba(79, 70, 229, 0.15);
+  --bg: #ffffff;
+  --border: #e2e8f0;
+  --text: #1e2937;
+  --text-muted: #64748b;
+  --search-bg: #f8fafc;
+
+  position: sticky;
+  top: 0;
+  z-index: 100; /* above content, below modal overlays (1000+) */
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  /* margin-bottom: 55px; */
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* brand ←  → actions */
+  gap: 1.5rem;
+  flex-wrap: wrap; /* safe for mobile */
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Brand / Title */
+.nav-brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* Center area – holds the search bar */
+.nav-center {
+  flex: 1;                     /* pushes actions to the right */
+  display: flex;
+  justify-content: center;
+  max-width: 640px;            /* keeps search from stretching too wide */
+}
+
+/* Search wrapper */
+.nav-search {
+  width: 100%;
+  max-width: 480px;
+  position: relative;
+}
+
+/* The actual search input */
+.nav-search input[type="text"] {
+  width: 100%;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: 9999px;        /* pill shape */
+  background: var(--search-bg);
+  color: var(--text);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.nav-search input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Focus glow – matches your app’s primary color */
+.nav-search input:focus {
+  border-color: var(--primary);
+  background: #fff;
+  box-shadow: 0 0 0 3px var(--primary-focus);
+}
+
+/* Optional: subtle search icon inside the input */
+.nav-search::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Right‑side actions (profile, logout, etc.) */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  white-space: nowrap;
+}
+
+/* Generic button style for nav actions (optional) */
+.nav-actions .btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.nav-actions .btn-secondary {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+.nav-actions .btn-secondary:hover {
+  background: #e2e8f0;
+}
+
+/* ====================== Responsive tweaks ====================== */
+@media (max-width: 768px) {
+  .app-navbar {
+    padding: 0.6rem 1rem;
+  }
+  .nav-center {
+    order: 3;                /* move search below brand/actions on very small screens */
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+  .nav-search {
+    max-width: 100%;
+  }
+}

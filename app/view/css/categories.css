@@ -1,0 +1,180 @@
+/* ====================== CATEGORIES.CSS - LIGHT MODE (Fresh Style) ====================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: #f8fafc;
+    color: #1e2937;
+    min-height: 100vh;
+    padding: -0.5rem 2rem;
+    line-height: 1.6;
+}
+
+main {
+    padding-top: 30px ;
+    max-width: 83%;
+    margin: 0 auto;
+}
+
+/* Header */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.page-header h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.btn {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.98rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.btn-primary {
+    background: #4f46e5;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #4338ca;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(79, 70, 229, 0.25);
+}
+
+.btn-secondary {
+    background: white;
+    color: #334155;
+    border: 1.5px solid #e2e8f0;
+}
+
+.btn-secondary:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    transform: translateY(-2px);
+}
+
+/* Categories Grid */
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 1.6rem;
+}
+
+/* Category Card - New Clean Style */
+.category-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 1.75rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.category-card:hover {
+    border-color: #6366f1;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08);
+    transform: translateY(-6px);
+}
+
+.category-card h3 {
+    font-size: 1.35rem;
+    margin-bottom: 0.6rem;
+    color: #0f172a;
+    font-weight: 600;
+}
+
+.category-card p {
+    color: #64748b;
+    font-size: 0.97rem;
+    margin-bottom: 1.6rem;
+    display: -webkit-box;
+    /* -webkit-line-clamp: 3; */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Card Actions */
+.card-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.card-actions form {
+    margin: 0;
+}
+
+.card-actions button {
+    padding: 9px 18px;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-view {
+    background: #4f46e5;
+    color: white;
+    border: none;
+}
+
+.btn-view:hover {
+    background: #4338ca;
+}
+
+.btn-edit {
+    background: #64748b;
+    color: white;
+    border: none;
+}
+
+.btn-edit:hover {
+    background: #475569;
+}
+
+.btn-delete {
+    background: #ef4444;
+    color: white;
+    border: none;
+}
+
+.btn-delete:hover {
+    background: #dc2626;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 5rem 2rem;
+    color: #64748b;
+    font-size: 1.15rem;
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+}
