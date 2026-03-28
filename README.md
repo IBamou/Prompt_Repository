@@ -81,9 +81,9 @@ See `query.sql` for the complete schema.
 ## Default Admin Account
 
 The application creates a default admin user on first load:
-- **Name**: Ilyas
-- **Email**: ilyas0bmp@gmail.com
-- **Password**: password123
+- **Name**: admin name
+- **Email**: exemple@gmail.com
+- **Password**: passwor
 
 ## Routes
 
